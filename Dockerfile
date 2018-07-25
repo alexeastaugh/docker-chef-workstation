@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y locales && \
     locale-gen en_GB.UTF-8 && \
     update-locale LANG=en_GB.UTF-8 && \
-    apt-get install -y wget ssh git vim tree && \
+    apt-get install -y wget ssh git vim tree build-essential docker.io && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -23,9 +23,10 @@ RUN wget --content-disposition "http://packages.chef.io/files/${CHANNEL}/chefdk/
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 ENV PATH="/opt/chefdk/embedded/bin:${PATH}"
 
-RUN useradd -u 501 alex
-RUN mkdir -p /home/alex
-RUN chown alex. /home/alex
+RUN useradd -u 501 alex && \
+    mkdir -p /home/alex && \
+    chown alex:alex /home/alex && \
+    usermod -a -G staff alex
 
 RUN mkdir /chef-repo
 WORKDIR /chef-repo
